@@ -19,8 +19,8 @@ export default function Sidebar({
       <aside className={`sidebar ${isOpen ? 'open' : ''}`}>
         <div className="sidebar-header">
           <div className="sidebar-logo">
-            <span className="logo-emoji">🐰</span>
-            <span className="logo-text">Bunny's Home</span>
+            <span className="logo-emoji">🐱</span>
+            <span className="logo-text">Cat's Home</span>
           </div>
           <button className="icon-btn sidebar-close" onClick={onClose}>
             ✕
