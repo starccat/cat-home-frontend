@@ -30,6 +30,8 @@ body {
   background: linear-gradient(180deg, var(--bg-gradient-start), var(--bg-gradient-end));
   color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
+  /* iPhone 安全区域适配 */
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
 }
 
 #root {
