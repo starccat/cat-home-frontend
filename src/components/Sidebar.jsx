@@ -61,6 +61,11 @@ export default function Sidebar({
         </div>
 
         <div className="sidebar-footer">
+          <div className="model-badge">
+            <span className="model-dot"></span>
+            <span className="model-name">DeepSeek-V3</span>
+            <span className="model-via">via 硅基流动</span>
+          </div>
           <button className="footer-btn" onClick={onOpenSettings}>
             ⚙️ 设置
           </button>
