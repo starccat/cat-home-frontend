@@ -1,0 +1,23 @@
+.chat-window {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.message-content {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+@media (max-width: 768px) {
+  .menu-btn {
+    display: flex !important;
+  }
+}
+
+@media (min-width: 769px) {
+  .menu-btn {
+    display: none !important;
+  }
+}
