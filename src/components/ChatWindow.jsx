@@ -47,7 +47,7 @@ export default function ChatWindow({
           ☰
         </button>
         <div className="topbar-title">
-          {currentSession ? (currentSession.name || '新对话') : 'Bunny\'s Home'}
+          {currentSession ? (currentSession.name || '新对话') : 'Cat\'s Home'}
         </div>
         <button className="icon-btn" onClick={onNewSession} title="新对话">
           ✏️
@@ -71,8 +71,8 @@ export default function ChatWindow({
           </div>
         ) : messages.length === 0 ? (
           <div className="empty-state">
-            <div className="emoji">🐰</div>
-            <div className="title">Bunny's Home</div>
+            <div className="emoji">🐱</div>
+            <div className="title">Cat's Home</div>
             <div className="subtitle">跟你的 AI 伴侣说点什么吧～</div>
           </div>
         ) : (
@@ -84,7 +84,7 @@ export default function ChatWindow({
         {/* AI 正在输入 */}
         {sending && (
           <div className="message assistant">
-            <div className="message-avatar">🐰</div>
+            <div className="message-avatar">🐱</div>
             <div className="message-bubble">
               <div className="typing-indicator">
                 <span></span>
@@ -127,7 +127,7 @@ function MessageBubble({ message }) {
   return (
     <div className={`message ${message.role}`}>
       <div className="message-avatar">
-        {message.role === 'user' ? '🧑' : '🐰'}
+        {message.role === 'user' ? '🧑' : '🐱'}
       </div>
       <div className="message-content">
         {message.reasoning_content && (
