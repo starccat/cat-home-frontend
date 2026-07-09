@@ -15,6 +15,7 @@ export default function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [settingsOpen, setSettingsOpen] = useState(false)
   const [settings, setSettings] = useState(null)
+  const [currentModel, setCurrentModel] = useState(null)
   const messagesEndRef = useRef(null)
 
   // 加载会话列表
@@ -80,6 +81,11 @@ export default function App() {
 
     try {
       const reply = await api.sendMessage(currentSession.id, text)
+
+      // 捕获当前使用的模型名
+      if (reply.model) {
+        setCurrentModel(reply.model)
+      }
 
       const aiMsg = {
         role: 'assistant',
@@ -154,6 +160,7 @@ export default function App() {
         onNew={handleNewSession}
         onDelete={handleDeleteSession}
         onOpenSettings={() => setSettingsOpen(true)}
+        currentModel={currentModel}
       />
 
       <ChatWindow
