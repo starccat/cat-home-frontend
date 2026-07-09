@@ -9,8 +9,16 @@ export default function Sidebar({
   onSelect,
   onNew,
   onDelete,
-  onOpenSettings
+  onOpenSettings,
+  currentModel
 }) {
+  // 格式化模型名：deepseek-ai/DeepSeek-V4-Pro -> DeepSeek-V4-Pro
+  const formatModelName = (model) => {
+    if (!model) return '未连接'
+    const parts = model.split('/')
+    return parts[parts.length - 1]
+  }
+
   return (
     <>
       {/* 遮罩层（手机端） */}
@@ -63,7 +71,7 @@ export default function Sidebar({
         <div className="sidebar-footer">
           <div className="model-badge">
             <span className="model-dot"></span>
-            <span className="model-name">DeepSeek-V3</span>
+            <span className="model-name">{formatModelName(currentModel)}</span>
             <span className="model-via">via 硅基流动</span>
           </div>
           <button className="footer-btn" onClick={onOpenSettings}>
