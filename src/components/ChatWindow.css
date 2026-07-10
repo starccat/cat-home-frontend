@@ -10,6 +10,20 @@
   min-width: 0;
 }
 
+/* 流式打字光标 */
+.streaming-cursor {
+  display: inline-block;
+  animation: blink 0.8s steps(2) infinite;
+  color: #888;
+  font-weight: 300;
+  margin-left: 1px;
+}
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
 @media (max-width: 768px) {
   .menu-btn {
     display: flex !important;
