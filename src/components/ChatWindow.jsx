@@ -81,19 +81,25 @@ export default function ChatWindow({
           ))
         )}
 
-        {/* AI 正在输入 */}
-        {sending && (
-          <div className="message assistant">
-            <div className="message-avatar">🐱</div>
-            <div className="message-bubble">
-              <div className="typing-indicator">
-                <span></span>
-                <span></span>
-                <span></span>
+        {/* AI 正在输入（只在还没有流式内容时显示打字动画） */}
+        {sending && messages.length > 0 && (() => {
+          const last = messages[messages.length - 1]
+          if (last?.role === 'assistant' && last.isStreaming && !last.content) {
+            return (
+              <div className="message assistant">
+                <div className="message-avatar">🐱</div>
+                <div className="message-bubble">
+                  <div className="typing-indicator">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-        )}
+            )
+          }
+          return null
+        })()}
 
         <div ref={messagesEndRef} />
       </div>
@@ -147,6 +153,9 @@ function MessageBubble({ message }) {
         )}
         <div className="message-bubble">
           {message.content}
+          {message.isStreaming && message.content && (
+            <span className="streaming-cursor">▋</span>
+          )}
         </div>
       </div>
     </div>
