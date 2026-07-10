@@ -79,25 +79,72 @@ export default function App() {
     setSending(true)
     setError(null)
 
+    // 先放一个空的 AI 消息，用于流式追加
+    setMessages(prev => [...prev, {
+      role: 'assistant',
+      content: '',
+      reasoning_content: '',
+      isStreaming: true,
+      created_at: new Date().toISOString()
+    }])
+
     try {
-      const reply = await api.sendMessage(currentSession.id, text)
-
-      // 捕获当前使用的模型名
-      if (reply.model) {
-        setCurrentModel(reply.model)
-      }
-
-      const aiMsg = {
-        role: 'assistant',
-        content: reply.reply,
-        reasoning_content: reply.reasoning,
-        created_at: new Date().toISOString()
-      }
-      setMessages(prev => [...prev, aiMsg])
+      await api.sendMessageStream(
+        currentSession.id,
+        text,
+        {
+          onText: (chunk) => {
+            setMessages(prev => {
+              const updated = [...prev]
+              const last = updated[updated.length - 1]
+              if (last && last.role === 'assistant' && last.isStreaming) {
+                updated[updated.length - 1] = {
+                  ...last,
+                  content: last.content + chunk
+                }
+              }
+              return updated
+            })
+          },
+          onReasoning: (chunk) => {
+            setMessages(prev => {
+              const updated = [...prev]
+              const last = updated[updated.length - 1]
+              if (last && last.role === 'assistant' && last.isStreaming) {
+                updated[updated.length - 1] = {
+                  ...last,
+                  reasoning_content: (last.reasoning_content || '') + chunk
+                }
+              }
+              return updated
+            })
+          },
+          onDone: ({ model, compressed }) => {
+            if (model) setCurrentModel(model)
+            setMessages(prev => prev.map(msg =>
+              msg.isStreaming ? { ...msg, isStreaming: false } : msg
+            ))
+          },
+          onError: (errMsg) => {
+            setMessages(prev => {
+              const updated = [...prev]
+              const last = updated[updated.length - 1]
+              if (last && last.role === 'assistant' && last.isStreaming) {
+                updated[updated.length - 1] = {
+                  ...last,
+                  content: last.content || `（出错了：${errMsg}）`,
+                  isStreaming: false
+                }
+              }
+              return updated
+            })
+          }
+        }
+      )
     } catch (err) {
       setError('发送消息失败: ' + err.message)
-      // 移除用户消息，让用户可以重试
-      setMessages(prev => prev.slice(0, -1))
+      // 移除用户消息和空的 AI 消息
+      setMessages(prev => prev.slice(0, -2))
     } finally {
       setSending(false)
     }
